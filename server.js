@@ -21,6 +21,14 @@ var todos = [
   { _id: 3, task: 'Homework', description: 'Make this app super awesome!' }
 ];
 
+let idCount = 3;
+
+const Todo = function(task, description){
+  this.task = task;
+  this.description = description;
+  this._id = ++idCount;
+};
+
 /**********
  * ROUTES *
  **********/
@@ -60,6 +68,10 @@ app.post('/api/todos', function create(req, res) {
   /* This endpoint will add a todo to our "database"
    * and respond with the newly created todo.
    */
+  console.log(req.body);
+  const newTodo = new Todo(req.body.task, req.body.description);
+  todos.push(newTodo);
+  res.json(newTodo);
 });
 
 app.get('/api/todos/:id', function show(req, res) {
