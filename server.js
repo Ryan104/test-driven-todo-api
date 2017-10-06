@@ -53,7 +53,7 @@ app.get('/api/todos/search', function search(req, res) {
 app.get('/api/todos', function index(req, res) {
   /* This endpoint responds with all of the todos
    */
-   res.json({todos: todos});
+  res.json({todos: todos});
 });
 
 app.post('/api/todos', function create(req, res) {
@@ -66,6 +66,7 @@ app.get('/api/todos/:id', function show(req, res) {
   /* This endpoint will return a single todo with the
    * id specified in the route parameter (:id)
    */
+  res.json(todos.find((todo) => (todo._id == req.params.id)));
 });
 
 app.put('/api/todos/:id', function update(req, res) {
