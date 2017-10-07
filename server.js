@@ -21,13 +21,18 @@ var todos = [
   { _id: 3, task: 'Homework', description: 'Make this app super awesome!' }
 ];
 
-let idCount = 3;
+let idCount = 3; // Keep track of current unique _id
 
-const Todo = function(task, description){
+function Todo(task, description, id=(++idCount)){ // constructor
+  // return {
+  //   task: task,
+  //   description: description,
+  //   _id: id
+  // };
   this.task = task;
   this.description = description;
-  this._id = ++idCount;
-};
+  this._id = id;
+}
 
 /**********
  * ROUTES *
@@ -70,6 +75,7 @@ app.post('/api/todos', function create(req, res) {
    */
   const newTodo = new Todo(req.body.task, req.body.description);
   todos.push(newTodo);
+  console.log(newTodo);
   res.json(newTodo);
 });
 
@@ -85,6 +91,17 @@ app.put('/api/todos/:id', function update(req, res) {
    * id specified in the route parameter (:id) and respond
    * with the newly updated todo.
    */
+  let updated = {};
+  todos = todos.map((todo) => {
+    if (todo._id == req.params.id) {
+      todo.task = req.body.task;
+      todo.description = req.body.description;
+      updated = todo;
+    }
+    return todo;
+  });
+
+  res.json(updated);
 });
 
 app.delete('/api/todos/:id', function destroy(req, res) {
@@ -92,8 +109,7 @@ app.delete('/api/todos/:id', function destroy(req, res) {
    * id specified in the route parameter (:id) and respond
    * with deleted todo.
    */
-  let deleted = {};
-  console.log(req.params.id);
+  let deleted = {}; // save which item was deleted
   todos = todos.filter((todo) => {
     if (todo._id == req.params.id) deleted = todo;
     return todo._id != req.params.id;
