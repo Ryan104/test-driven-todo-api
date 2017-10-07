@@ -61,6 +61,10 @@ app.get('/api/todos/search', function search(req, res) {
   /* This endpoint responds with the search results from the
    * query in the request. COMPLETE THIS ENDPOINT LAST.
    */
+  let searchArr = todos.filter((todo) => {
+    return todo.task.includes(req.query.q);
+  });
+  res.json({todos: searchArr});
 });
 
 app.get('/api/todos', function index(req, res) {
