@@ -46,6 +46,11 @@ app.get('/', function homepage(req, res) {
   res.sendFile(__dirname + '/views/index.html');
 });
 
+app.get('/search', (req, res) => {
+  console.log('Search route hit');
+  res.sendFile(__dirname + '/views/search.html');
+});
+
 
 /*
  * JSON API Endpoints

@@ -13,6 +13,9 @@ $(document).ready(function() {
   // form to create new todo
   var $createTodo = $('#create-todo');
 
+  // form to search todos
+  var $searchTodos = $('#search-todo');
+
   // compile handlebars template
   var source = $('#todos-template').html();
   var template = Handlebars.compile(source);
@@ -31,19 +34,38 @@ $(document).ready(function() {
   };
 
   // GET all todos on page load
-  $.ajax({
-    method: "GET",
-    url: baseUrl,
-    success: function onIndexSuccess(json) {
+  if (window.location.pathname === '/'){
+    $.ajax({
+      method: "GET",
+      url: baseUrl,
+      success: function onIndexSuccess(json) {
+        console.log(json);
+
+        // set `allTodos` to todo data (json.data) from API
+        allTodos = json.todos;
+
+        // render all todos to view
+        render();
+      }
+    });
+  }
+
+  // listen for submit event on search form
+  $searchTodos.on('submit', function(event) {
+    event.preventDefault();
+
+    var searchTask = $(this).serialize();
+    var searchUrl = baseUrl + '/search?' + searchTask;
+    
+    $.get(searchUrl, function(json) {
+      console.log('getting from');
       console.log(json);
 
-      // set `allTodos` to todo data (json.data) from API
       allTodos = json.todos;
-
-      // render all todos to view
       render();
-    }
+    });
   });
+
 
   // listen for submit even on form
   $createTodo.on('submit', function (event) {
